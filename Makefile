@@ -5,5 +5,5 @@ PYTHON_RUN:=pipenv run --quiet python $(MAIN_FILE)
 aws-show-profiles:
 	@$(PYTHON_RUN) aws-show-profiles
 
-test:	
+aws-login:	
 	@$(PYTHON_RUN) aws-login
