@@ -14,4 +14,5 @@ class AWS:
             word = string[start:end].replace('profile', "")
             word = word.replace(']', "")
             res.append(word.strip())
+        assert res, f'No profiles found, check {cls.config_path} file'
         return res

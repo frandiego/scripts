@@ -5,26 +5,28 @@ import click
 
 
 
+def run_cmd(cmd:str) -> None:
+    print(cmd)
+    run(cmd.split())
+
+
 
 @click.group()
 def aws():
-    print
+    pass
 
 
 @aws.command()
 def aws_show_profiles():
     ls = AWS.list_profiles()
-    if ls:
-        return click.secho("\n".join(ls), blink=True, bold=True)
-    return click.error('No profiles found')
+    return click.secho("\n".join(ls), blink=True, bold=True)
+
 
 @aws.command()
 def aws_login():
     ls = AWS.list_profiles()
     profile = questionary.select("Login Profile",choices=ls).ask()
-    cmd = f'aws sso login --profile {profile}'
-    print(cmd)
-    run(cmd.split())
+    run_cmd(f'aws sso login --profile {profile}')
 
 if __name__ == "__main__":
     aws()
