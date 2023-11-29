@@ -18,6 +18,3 @@ CODENAMES = [
 
 AWS_PATH = '~/.aws'
 
-
-from .tools import Tools
-from .cli import Cli
