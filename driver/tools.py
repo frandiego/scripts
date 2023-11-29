@@ -1,7 +1,11 @@
 from subprocess import run, check_output
 from re import finditer
+import os
+
+from . import AWS_CONFIG_PATH, AWS_CONFIGS_PATH
 
 class Tools:
+
 
     @staticmethod  
     def run_cmd(cmd:str) -> None:
@@ -24,3 +28,9 @@ class Tools:
             res.append(word.strip())
         assert res, f'No profiles found, check {path} file'
         return res
+
+    @classmethod
+    def select_role(cls, role: str):
+        config_role = os.path.join(os.path.expanduser(AWS_CONFIGS_PATH),role)
+        cls.run_cmd(f'cp {config_role} {os.path.expanduser(AWS_CONFIG_PATH)}')
+

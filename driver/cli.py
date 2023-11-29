@@ -1,26 +1,37 @@
 from questionary import select
 import click
+import yaml
+import os
 
 from .tools import Tools
-from . import CONFIG_PATH, REGIONS
+from . import (
+    AWS_CONFIG_PATH, 
+    AWS_CONFIGS_PATH, 
+    REGIONS, 
+    CODENAMES, 
+    KUBE_CONFIG_PATH, 
+)
 
 class Cli:
-
-    _profiles: list = []
-    _regions: list = []
+    codenames: list = CODENAMES
+    regions: list = REGIONS
 
     @property
-    def profiles(self) -> list:
-        if not self._profiles:
-            self._profiles = list(Tools.read_profiles_from_config(CONFIG_PATH))
-        return self._profiles
-     
-    @property
-    def regions(self) -> list:
-        if not self._regions:
-            self._regions = list(REGIONS)
-        return self._regions
+    def kubeconfig(self):
+        return yaml.safe_load(open(os.path.expanduser(KUBE_CONFIG_PATH), 'r'))
     
+    @property
+    def kube_contexts(self):
+        return list(map(lambda i: i['name'], self.kubeconfig['contexts']))
+
+    @property
+    def roles(self):
+        return os.listdir(os.path.expanduser(AWS_CONFIGS_PATH))
+    
+    @property
+    def profiles(self):
+        return list(Tools.read_profiles_from_config(AWS_CONFIG_PATH))
+
     @staticmethod
     def show(ls: list):
         return click.secho(Tools.to_lines(ls), blink=True, bold=True)
